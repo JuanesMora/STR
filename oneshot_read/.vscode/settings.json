@@ -3,7 +3,7 @@
   "idf.openOcdConfigs": [
     "board/esp32c6-builtin.cfg"
   ],
-  "idf.portWin": "detect",
+  "idf.portWin": "COM3",
   "idf.currentSetup": "C:\\esp-idf\\v5.5.2\\esp-idf",
   "idf.customExtraVars": {
     "IDF_TARGET": "esp32c6"
@@ -13,5 +13,6 @@
     "--background-index",
     "--query-driver=**",
     "--compile-commands-dir=c:\\Users\\carlo\\Desktop\\Esteban semestre actual\\STR\\oneshot_read\\build"
-  ]
+  ],
+  "idf.flashType": "UART"
 }

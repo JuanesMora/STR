@@ -3,6 +3,7 @@
 
 #include "driver/ledc.h"
 #include "esp_err.h"
+#include <stdint.h>
 
 typedef struct {
     int gpio_num;
