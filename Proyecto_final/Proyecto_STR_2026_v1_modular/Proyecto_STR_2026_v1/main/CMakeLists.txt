@@ -1,0 +1,33 @@
+idf_component_register(
+    SRCS
+        "main.c"
+        "wifi_app.c"
+        "http_server.c"
+        "app_state.c"
+        "app_storage.c"
+        "ntc_adc.c"
+        "fan_pwm.c"
+        "rgb_ctrl.c"
+        "servo_ctrl.c"
+        "alarm_led.c"
+        "app_tasks.c"
+    PRIV_REQUIRES
+        esp_wifi
+        nvs_flash
+        driver
+        esp_driver_gpio
+        esp_driver_ledc
+        esp_adc
+        esp_http_server
+        esp_timer
+        app_update
+        json
+        mqtt
+    INCLUDE_DIRS "."
+    EMBED_FILES
+        webpage/app.css
+        webpage/app.js
+        webpage/favicon.ico
+        webpage/index.html
+        webpage/jquery-3.3.1.min.js
+)

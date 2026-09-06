@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>STR 2026 - Control Ambiental</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">ESP32-C6 · FreeRTOS · WiFi · OTA</p>
+      <h1>Estación domótica inteligente</h1>
+      <p class="subtitle">Control ambiental de ventilación, iluminación RGB, cortinas automatizadas y actualización OTA.</p>
+    </div>
+    <div class="status-pill" id="connectionState">Conectado al ESP</div>
+  </header>
+
+  <main class="grid">
+    <section class="card primary-card">
+      <h2>Estado del sistema</h2>
+      <div class="metrics">
+        <div class="metric"><span>Temperatura</span><strong id="temperature">-- °C</strong></div>
+        <div class="metric"><span>Ventilador</span><strong id="fanStatus">-- %</strong></div>
+        <div class="metric"><span>Cortina</span><strong id="curtainStatus">-- %</strong></div>
+        <div class="metric"><span>Alarma</span><strong id="alarmStatus">--</strong></div>
+      </div>
+      <p class="small" id="adcStatus">ADC: -- · Voltaje: -- V</p>
+    </section>
+
+    <section class="card">
+      <h2>Ventilación</h2>
+      <label>Modo</label>
+      <select id="fanMode">
+        <option value="auto">Automático proporcional</option>
+        <option value="manual">Manual</option>
+      </select>
+      <div class="two-cols">
+        <div>
+          <label>Temperatura deseada (°C)</label>
+          <input id="tempDesired" type="number" step="0.1" value="25">
+        </div>
+        <div>
+          <label>Temperatura máxima (°C)</label>
+          <input id="tempMax" type="number" step="0.1" value="30">
+        </div>
+      </div>
+      <label>Velocidad manual (%)</label>
+      <input id="fanPercent" type="range" min="0" max="100" value="0">
+      <output id="fanPercentOut">0%</output>
+      <button onclick="saveFan()">Guardar ventilación</button>
+    </section>
+
+    <section class="card">
+      <h2>Iluminación RGB</h2>
+      <p class="small">Configurado para LED RGB de cátodo común.</p>
+      <div class="three-cols">
+        <div><label>Rojo (%)</label><input id="rgbR" type="number" min="0" max="100" value="0"></div>
+        <div><label>Verde (%)</label><input id="rgbG" type="number" min="0" max="100" value="0"></div>
+        <div><label>Azul (%)</label><input id="rgbB" type="number" min="0" max="100" value="100"></div>
+      </div>
+      <label>Brillo (%)</label>
+      <input id="rgbBrightness" type="range" min="0" max="100" value="60">
+      <output id="rgbBrightnessOut">60%</output>
+      <button onclick="saveRgb()">Guardar RGB</button>
+    </section>
+
+    <section class="card">
+      <h2>Cortinas</h2>
+      <label>Modo</label>
+      <select id="curtainMode">
+        <option value="manual">Manual</option>
+        <option value="auto">Automático por horario</option>
+      </select>
+      <label>Apertura deseada (%)</label>
+      <input id="curtainPercent" type="range" min="0" max="100" value="0">
+      <output id="curtainPercentOut">0%</output>
+      <button onclick="moveCurtain()">Mover cortina</button>
+      <button class="secondary" onclick="saveCurtainMode()">Guardar solo modo</button>
+      <p class="small">Servo continuo 360°: el porcentaje se estima por tiempo de giro. Calibra en <code>app_config.h</code>.</p>
+    </section>
+
+    <section class="card wide">
+      <h2>Programación de cortinas</h2>
+      <p class="small">Mínimo 8 registros programables: hora, minuto y porcentaje de apertura.</p>
+      <div id="scheduleList" class="schedule-list"></div>
+      <button onclick="saveSchedule()">Guardar programación</button>
+    </section>
+
+    <section class="card">
+      <h2>WiFi STA</h2>
+      <p class="small">Conecta el ESP32-C6 a una red local.</p>
+      <label>SSID de red local</label>
+      <input id="staSsid" placeholder="Nombre de tu WiFi">
+      <label>Contraseña</label>
+      <input id="staPassword" type="password" placeholder="Contraseña WiFi">
+      <button onclick="saveStaWifi()">Conectar WiFi</button>
+      <p class="small" id="wifiStatus">Estado WiFi: --</p>
+    </section>
+
+    <section class="card">
+      <h2>Soft-AP del ESP</h2>
+      <p class="small">Cambia el nombre y contraseña de la red que transmite el ESP.</p>
+      <label>Nuevo SSID AP</label>
+      <input id="apSsid" placeholder="ESP32C6_STR">
+      <label>Nueva contraseña AP</label>
+      <input id="apPassword" type="password" placeholder="Mínimo 8 caracteres">
+      <button onclick="saveApWifi()">Guardar AP</button>
+    </section>
+
+    <section class="card wide">
+      <h2>Actualización OTA</h2>
+      <p class="small">Selecciona el archivo <code>.bin</code> generado por <code>idf.py build</code>.</p>
+      <input id="otaFile" type="file" accept=".bin">
+      <button onclick="uploadOta()">Subir firmware OTA</button>
+      <p class="small" id="otaStatus">OTA: pendiente</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>STR 2026 · Sistema Automatizado de Control Ambiental</span>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
